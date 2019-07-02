@@ -30,19 +30,16 @@ const cache = {};
  * @param from the first moment to be fetched
  * @param to (optional) the last moment to be fetched
  */
-export default async function getTimesheets(from: Moment, to?: Moment): Promise<Array<Timesheet> | null> {
+export default async function getTimesheets(from: Moment, to?: Moment): Promise<Array<Timesheet>> {
   const res = await axios.get('/timesheets', {
     params: {
       fromDate: from.format('YYYY-MM-DD'),
       toDate: to ? to.format('YYYY-MM-DD') : undefined,
     }
   });
-  if (res != null) {
-    console.debug('received response from api');
-    console.debug(`${res.data ? (res.data.projects ? res.data.projects.length : 0) : 0} projects returned`);
-    return res.data ? (res.data["projects"] ? res.data.projects.map(jsonToTimesheet) : []) : null;
-  }
-  return null;
+  console.debug('received response from api');
+  console.debug(`${res.data ? (res.data.projects ? res.data.projects.length : 0) : 0} projects returned`);
+  return res.data ? (res.data["projects"] ? res.data.projects.map(jsonToTimesheet) : []) : [];
 }
 
 export async function getProjectsForWeek(week: Moment): Promise<Array<string>> {

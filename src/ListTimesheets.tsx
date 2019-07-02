@@ -43,7 +43,11 @@ const ListTimesheets: React.FC<{month?: Moment}> = ({
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
 
   useEffect(() => {
-    getTimesheets((month || moment()).startOf('month')).then(setTimesheets);
+    try {
+      getTimesheets((month || moment()).startOf('month')).then(setTimesheets);
+    } catch (e) {
+      console.error('could not fetch timesheets', e);
+    }
   }, [month]);
   
   const weeks = partitionIntoWeeks(timesheets);
