@@ -1,0 +1,40 @@
+{
+  "projects":
+    [
+      {  
+        "projectCode": "abc",
+        "date": "2019-06-17",
+        "hours": 7.5
+      },
+      {
+        "projectCode": "abc",
+        "date": "2019-06-18",
+        "hours": 4
+      },
+      {
+        "projectCode": "def",
+        "date": "2019-06-18",
+        "hours": 3.5
+      },
+      {
+        "projectCode": "abc",
+        "date": "2019-06-19",
+        "hours": 1
+      },
+      {
+        "projectCode": "team-management",
+        "date": "2019-06-19",
+        "hours": 6.5
+      },
+      {
+        "projectCode": "annual-leave",
+        "date": "2019-06-20",
+        "hours": 7.5
+      },
+      {
+        "projectCode": "bau-123",
+        "date": "2019-06-21",
+        "hours": 7.5
+      }
+    ]
+}
