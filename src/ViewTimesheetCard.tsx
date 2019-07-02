@@ -69,9 +69,9 @@ const ViewTimesheetCard: React.FC<{week: string, timesheets: Timesheet[]}> = ({
           }
           action={
             <IconButton
-            onClick={handleOpenClick}
-            aria-label="view timesheet"
-            aria-expanded={open}
+              onClick={handleOpenClick}
+              aria-label="view timesheet"
+              aria-expanded={open}
             >
               {open ? <ExpandLessIcon/> : <ExpandMoreIcon/>}
             </IconButton>
@@ -82,21 +82,23 @@ const ViewTimesheetCard: React.FC<{week: string, timesheets: Timesheet[]}> = ({
         <CardContent>
           <Table>
             <TableHead>
-              <TableCell>Project</TableCell>
-              <TableCell>{monday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{tuesday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{wednesday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{thursday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{friday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{saturday.format(DAY_FORMAT)}</TableCell>
-              <TableCell>{sunday.format(DAY_FORMAT)}</TableCell>
+              <TableRow>
+                <TableCell>Project</TableCell>
+                <TableCell>{monday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{tuesday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{wednesday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{thursday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{friday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{saturday.format(DAY_FORMAT)}</TableCell>
+                <TableCell>{sunday.format(DAY_FORMAT)}</TableCell>
+              </TableRow>
             </TableHead>
             <TableBody>
               {
                 allProjects.map(p => {
                   const ts = timesheets.filter((t) => t.projectCode === p);
                   return (
-                    <TableRow>
+                    <TableRow key={p}>
                       <TableCell>{p}</TableCell>
                       <TableCell>
                         
