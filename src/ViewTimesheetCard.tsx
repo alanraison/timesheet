@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles'; 
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -15,7 +15,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import moment, { Moment } from 'moment';
-import { Timesheet } from './api';
+import { getTimesheetForWeek, daysOfWeek, Timesheet } from './api';
 
 const DAY_FORMAT = 'dd Do MMM';
 const WEEK_FORMAT = 'Do MMM';
@@ -34,28 +34,20 @@ function getForProjectCodeAndDay(projectCode: string, day: Moment, timesheets: T
 
 const ViewTimesheetCard: React.FC<{week: string, timesheets: Timesheet[]}> = ({
   week,
-  timesheets,
 }) => {
   const [open, setOpen] = useState(false);
+  const [weeklyTimesheet, setTimesheet] = useState<Map<string, Map<Moment, number>>>(new Map()); 
   const classes = useStyles();
+  useEffect(() => {
+    getTimesheetForWeek(moment(week)).then(setTimesheet);
+  }, [week]);
 
   function handleOpenClick() {
     setOpen(!open);
   }
 
   const start = moment(week).startOf('isoWeek');
-  const allProjects = [...new Set(timesheets.map(t => t.projectCode))].sort();
-  const monday = start;
-  const tuesday = start.clone().add(1, 'd');
-  const wednesday = start.clone().add(2, 'd');
-  const thursday = start.clone().add(3, 'd');
-  const friday = start.clone().add(4, 'd');
-  const saturday = start.clone().add(5, 'd');
-  const sunday = start.clone().add(6, 'd');
-  const allDays = [monday, tuesday, wednesday, thursday, friday, saturday, sunday];
-
-  const allTime = new Map<string, Map<Moment, number>>(allProjects.map(p => [p, new Map([[monday, 1]])
-  ]))
+  const allDays = daysOfWeek(moment(week));
 
   return (
     <Card>
@@ -84,25 +76,24 @@ const ViewTimesheetCard: React.FC<{week: string, timesheets: Timesheet[]}> = ({
             <TableHead>
               <TableRow>
                 <TableCell>Project</TableCell>
-                <TableCell>{monday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{tuesday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{wednesday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{thursday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{friday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{saturday.format(DAY_FORMAT)}</TableCell>
-                <TableCell>{sunday.format(DAY_FORMAT)}</TableCell>
+                {
+                  allDays.map(d => <TableCell key={d.format(DAY_FORMAT)}>{d.format(DAY_FORMAT)}</TableCell>)
+                }
               </TableRow>
             </TableHead>
             <TableBody>
               {
-                allProjects.map(p => {
-                  const ts = timesheets.filter((t) => t.projectCode === p);
+                [...weeklyTimesheet.entries()].map(([p, ts]) => {
                   return (
                     <TableRow key={p}>
                       <TableCell>{p}</TableCell>
-                      <TableCell>
-                        
-                      </TableCell>
+                      {
+                        [...ts.values()].map(hours => (
+                          <TableCell>
+                            {hours}
+                          </TableCell>
+                        ))
+                      } 
                     </TableRow>
                   )
                 })
